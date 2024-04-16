@@ -5,13 +5,16 @@ from image_processor import ImageProcessor
 class CommandLineInterface:
     def __init__(self):
         self.parser = self.setup_parser()
+        self.processed_image = None
 
-    def setup_parser(self):
+    @staticmethod
+    def setup_parser():
         parser = argparse.ArgumentParser(description="Advanced Image Editing CLI Tool")
         parser.add_argument("--image", required=True, help="Path to the image file")
         parser.add_argument("--filter", help="Apply a filter")
         parser.add_argument("--adjust", action='append', nargs=2, help="Adjust image properties")
-        parser.add_argument("--output", help="Path to save the edited image")
+        parser.add_argument("--save", help="Path to save the edited image")
+        parser.add_argument("--display", action='store_true', help="Display the edited image")
         return parser
 
     def run(self):
@@ -21,11 +24,11 @@ class CommandLineInterface:
         if args.filter:
             processor.apply_filter(args.filter)
 
-        if args.adjust:
-            for adj, value in args.adjust:
-                processor.adjust_image(adj, int(value))
+        # if args.adjust:
+        #     for adj, value in args.adjust:
+        #         processor.adjust_image(adj, int(value))
 
-        if args.output:
-            processor.save_image(args.output)
-        else:
+        if args.save:
+            processor.save_image(args.save)
+        if args.display:
             processor.display_image()

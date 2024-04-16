@@ -10,11 +10,12 @@ This CLI tool makes use of convolution operations to apply effects such as blurr
 
 - **Multiple Filters**: Apply different filters including:
   - **Box Blur**: Softens the image.
-    - ![Box Blur Example](Images/box_blur_result.jpeg "Box Blur Result")
+    - ![Box Blur Example](../Images/box_blur_result.jpeg "Box Blur Result")
   - **Sobel Edge Detection**: Highlights edges, useful for object segmentation.
-    - ![Sobel Edge Detection Example](Images/sobel_result.png "Sobel Edge Detection Result")
+    - <img src="../Images/sobel_result.png" alt="Sobel Edge Detection Example" title="Sobel Edge Detection Result" width="300"/>
   - **Sharpen**: Enhances image details to make them more defined.
-    - ![Sharpen Example](Images/sharpen_result.png "Sharpen Result")
+    - ![Sharpen Example](../Images/sharpen_result.png "Sharpen Result")
+
 
 - **Image Adjustments**: Adjust brightness, contrast, and saturation to fine-tune the visual aspects.
 - **Layering**: Apply multiple filters and adjustments in sequence.
@@ -63,23 +64,3 @@ The tool supports the following commands:
 - **`--image <path>`**: Specifies the path to the image file.
 - **`--filter <filter-name> --strength <value>`**: Applies a specified filter with an optional strength value.
 - **`--adjust <adjustment-name> <value>`**: Performs color and image adjustments.
-
-## Contributing
-
-Contributions to the Advanced Image Editing CLI Tool are welcome! Please refer to the guidelines below:
-
-1. Fork the repository.
-2. Create a new branch for each feature or improvement.
-3. Send a pull request from each feature branch to the development branch.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgements
-
-Thanks to all contributors and users of the project. Your support is what makes continuous improvement possible.
-
----
-
-This README is crafted to be clear and concise, providing all the necessary information to get started with the project. Adjust the URLs and paths according to your actual repository location and project structure.
