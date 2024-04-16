@@ -1,6 +1,7 @@
 import argparse
 from image_processor import ImageProcessor
 
+
 class CommandLineInterface:
     def __init__(self):
         self.parser = self.setup_parser()
