@@ -104,7 +104,7 @@ class ImageProcessor:
         image_array = np.asarray(self.custom_image.convert_to_rgb().get_image(), dtype=np.float32)
 
         # Apply brightness adjustment by adding the value
-        image_array = np.clip(image_array + brightness_value, 0, 255)
+        image_array = np.clip(image_array + brightness_value, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY)
 
         # Convert back to Image and save to custom_image
         self.custom_image.set_image(Image.fromarray(image_array.astype("uint8")))
@@ -123,14 +123,14 @@ class ImageProcessor:
         image_array = np.asarray(self.custom_image.get_image(), dtype=np.float32)
 
         # Normalize the image array to [0, 1]
-        image_array /= 255.0
+        image_array /= float(CustomImage.MIN_INTENSITY)
 
         # Apply contrast factor
         mean = np.mean(image_array)
         image_array = mean + (image_array - mean) * contrast_factor
 
         # Clip values to [0, 1] and convert back to [0, 255]
-        image_array = np.clip(image_array, 0, 1) * 255
+        image_array = np.clip(image_array, 0, 1) * CustomImage.MAX_INTENSITY
 
         # Update image
         self.custom_image.set_image(Image.fromarray(image_array.astype('uint8')))
@@ -152,7 +152,7 @@ class ImageProcessor:
         for i in range(image_array.shape[0]):
             for j in range(image_array.shape[1]):
                 # Normalize RGB values to [0, 1]
-                r, g, b = image_array[i, j] / 255.0
+                r, g, b = image_array[i, j] / float(CustomImage.MAX_INTENSITY)
 
                 # Convert to HSV, adjust saturation, convert back to RGB
                 h, s, v = colorsys.rgb_to_hsv(r, g, b)
@@ -160,10 +160,10 @@ class ImageProcessor:
                 r, g, b = colorsys.hsv_to_rgb(h, s, v)
 
                 # Put the pixel back in the adjusted array
-                adjusted_array[i, j] = np.array([r, g, b]) * 255.0
+                adjusted_array[i, j] = np.array([r, g, b]) * float(CustomImage.MAX_INTENSITY)
 
         # Clip the values to be in the byte range and convert back to uint8
-        adjusted_array = np.clip(adjusted_array, 0, 255).astype('uint8')
+        adjusted_array = np.clip(adjusted_array, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype('uint8')
 
         # Update the image
         self.custom_image.set_image(Image.fromarray(adjusted_array))
