@@ -79,8 +79,9 @@ class CommandLineInterface:
             SystemExit: Exits the program if an invalid filter name is provided.
         """
         try:
-            for filter_name in args.filter:
-                processor.apply_filter(filter_name, args.strength)
+            if args.filter:
+                for filter_name in args.filter:
+                    processor.apply_filter(filter_name, args.strength)
         except ValueError as e:
             CommandLineInterface._output_error_and_exit_program(e, "Error applying filter")
 
@@ -97,9 +98,10 @@ class CommandLineInterface:
             SystemExit: Exits the program if an invalid adjustment is provided.
         """
         try:
-            for adjustment_pair in args.adjust:
-                adjustment, value = adjustment_pair
-                processor.adjust_image(adjustment, float(value))
+            if args.adjust:
+                for adjustment_pair in args.adjust:
+                    adjustment, value = adjustment_pair
+                    processor.adjust_image(adjustment, float(value))
         except ValueError as e:
             CommandLineInterface._output_error_and_exit_program(e, "Error adjusting image")
 

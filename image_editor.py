@@ -1,4 +1,4 @@
-from cli import CommandLineInterface
+from source.cli import CommandLineInterface
 
 if __name__ == "__main__":
     """
