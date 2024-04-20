@@ -30,14 +30,12 @@ class CommandLineInterface:
             CommandLineInterface._handle_adjustments(processor, args)
             CommandLineInterface._handle_output(processor, args)
         except IOError as e:
-            print(f"Error loading or processing image: {e}")
-            sys.exit(1)
+            self._output_error_and_exit_program(e, "Error loading or processing image")
         except ValueError as e:
-            print(f"Error in processing inputs: {e}")
+            self._output_error_and_exit_program(e, "Error in processing inputs")
             sys.exit(1)
         except Exception as e:
-            print(f"Unexpected error occurred: {e}")
-            sys.exit(1)
+            self._output_error_and_exit_program(e, "Error in processing inputs")
 
     @staticmethod
     def _setup_parser() -> argparse.ArgumentParser:
@@ -70,13 +68,11 @@ class CommandLineInterface:
         Raises:
             SystemExit: Exits the program if an invalid filter name is provided.
         """
-        if args.filter:
-            for filter_name in args.filter:
-                try:
-                    processor.apply_filter(filter_name, args.strength)
-                except ValueError as e:
-                    print(f"Error applying filter: {e}")
-                    sys.exit(1)
+        for filter_name in args.filter:
+            try:
+                processor.apply_filter(filter_name, args.strength)
+            except ValueError as e:
+                CommandLineInterface._output_error_and_exit_program(e, "Error applying filter")
 
     @staticmethod
     def _handle_adjustments(processor, args):
@@ -90,18 +86,12 @@ class CommandLineInterface:
         Raises:
             SystemExit: Exits the program if an invalid adjustment is provided.
         """
-        if args.adjust:
-            for adjustment_pair in args.adjust:
-                adjustment, value = adjustment_pair
-                if adjustment in [a.value for a in AdjustmentType]:
-                    try:
-                        processor.adjust_image(adjustment, float(value))
-                    except ValueError as e:
-                        print(f"Error adjusting image: {e}")
-                        sys.exit(1)
-                else:
-                    print(f"Invalid adjustment type: {adjustment}")
-                    sys.exit(1)
+        for adjustment_pair in args.adjust:
+            adjustment, value = adjustment_pair
+            try:
+                processor.adjust_image(adjustment, float(value))
+            except ValueError as e:
+                CommandLineInterface._output_error_and_exit_program(e, "Error adjusting image")
 
     @staticmethod
     def _handle_output(processor, args):
@@ -113,12 +103,23 @@ class CommandLineInterface:
                 processor.save_image(args.save)
                 print(f"Image successfully saved to {args.save}")
             except IOError as e:
-                print(f"Error saving image: {e}")
-                sys.exit(1)
+                CommandLineInterface._output_error_and_exit_program(e, "Error saving image")
         if args.display:
             try:
                 processor.display_image()
                 print("Image displayed successfully.")
             except Exception as e:
-                print(f"Error displaying image: {e}")
-                sys.exit(1)
+                CommandLineInterface._output_error_and_exit_program(e, "Error displaying image")
+
+    @staticmethod
+    def _output_error_and_exit_program(error, prefix_message="Error"):
+        """
+        Outputs an error message and exits the program.
+
+        Args:
+            error (Exception): The exception object containing the error message.
+            prefix_message (str): A prefix label for the error message to provide context.
+        """
+        message = f"{prefix_message}: {str(error)}"
+        print(message)
+        sys.exit(1)
