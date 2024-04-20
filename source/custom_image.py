@@ -7,6 +7,8 @@ class CustomImage:
     CustomImage provides a wrapper around the PIL Image library, encapsulating common image
     operations for ease of use in other parts of an application.
     """
+    MAX_INTENSITY = 255
+    MIN_INTENSITY = 0
 
     def __init__(self, path: str):
         """

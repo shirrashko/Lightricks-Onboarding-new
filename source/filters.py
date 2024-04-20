@@ -8,7 +8,7 @@ class BaseFilter:
     Abstract base class for image filters.
     """
 
-    def apply(self, image: CustomImage) -> CustomImage:
+    def apply(self, image: CustomImage) -> None:
         """
         Apply the filter to the given image.
 
@@ -27,24 +27,47 @@ class BaseFilter:
     def convolve(image_array: np.ndarray, kernel: np.ndarray) -> np.ndarray:
         """
         Perform convolution on the given image array using the specified kernel.
+
+        Args:
+            image_array (np.ndarray): The input image as a 2D (grayscale) or 3D (color) numpy array.
+            kernel (np.ndarray): The convolution kernel as a 2D numpy array.
+
+        Returns:
+            np.ndarray: The convolved image as a numpy array. The output will match the input dimensions.
+
+        Raises:
+            ValueError: If the kernel dimensions are greater than the image dimensions.
         """
-        if image_array.ndim == 2:  # If grayscale, add a third dimension
+        # Ensure the image is at least 3D (handle grayscale images by adding a channel dimension).
+        if image_array.ndim == 2:
             image_array = image_array[:, :, np.newaxis]
 
         kernel_height, kernel_width = kernel.shape
-        pad_height, pad_width = kernel_height // 2, kernel_width // 2
-        padded_image = np.pad(image_array, [(pad_height, pad_height), (pad_width, pad_width), (0, 0)],
-                              mode='constant', constant_values=0)
+        if kernel_height > image_array.shape[0] or kernel_width > image_array.shape[1]:
+            raise ValueError("Kernel size cannot be greater than image dimensions.")
 
+        pad_height, pad_width = kernel_height // 2, kernel_width // 2
+
+        # Pads with the reflection of the vector mirrored on the first and last values of the vector along each axis.
+        # For example, padding [1,2,3,4,5] with 2 elements on each side will result in [3,2,1,2,3,4,5,4,3].
+        padded_image = np.pad(image_array,
+                              ((pad_height, pad_height), (pad_width, pad_width), (0, 0)),
+                              mode='reflect')
+
+        # Prepare an output array of the same shape as the input.
         output_array = np.zeros_like(image_array)
+
+        # Perform convolution operation.
         for i in range(image_array.shape[0]):
             for j in range(image_array.shape[1]):
-                for k in range(image_array.shape[2]):
+                for k in range(image_array.shape[2]):  # Handle each channel independently.
                     region = padded_image[i:i + kernel_height, j:j + kernel_width, k]
                     output_array[i, j, k] = np.sum(region * kernel)
 
-        if output_array.shape[2] == 1:  # If originally grayscale, remove the third dimension
-            output_array = output_array[:, :, 0]
+        # If the original image was grayscale (single channel), remove the singleton dimension.
+        if output_array.shape[2] == 1:
+            output_array = output_array.squeeze(axis=2)
+
         return output_array
 
 
@@ -73,7 +96,7 @@ class EdgeDetectionFilter(BaseFilter):
         edges_x = self.convolve(image_array, sobel_x)
         edges_y = self.convolve(image_array, sobel_y)
         combined_edges = np.hypot(edges_x, edges_y)
-        edge_image = Image.fromarray(np.clip(combined_edges, 0, 255).astype('uint8'))
+        edge_image = Image.fromarray(np.clip(combined_edges, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype('uint8'))
         custom_image.set_image(edge_image)  # Update the CustomImage with the edge-detected image
 
 
@@ -86,6 +109,5 @@ class SharpenFilter(BaseFilter):
         image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         sharpen_kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
         sharpened_array = self.convolve(image_array, sharpen_kernel)
-        sharpened_image = Image.fromarray(np.clip(sharpened_array, 0, 255).astype('uint8'))
+        sharpened_image = Image.fromarray(np.clip(sharpened_array, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype('uint8'))
         custom_image.set_image(sharpened_image)  # Update the CustomImage with the sharpened image
-
