@@ -64,7 +64,7 @@ class BaseFilter:
         for i in range(image_array.shape[0]):
             for j in range(image_array.shape[1]):
                 for k in range(image_array.shape[2]):  # Handle each channel independently.
-                    region = padded_image[i : i + kernel_height, j : j + kernel_width, k]
+                    region = padded_image[i: i + kernel_height, j: j + kernel_width, k]
                     output_array[i, j, k] = np.sum(region * kernel)
 
         # If the original image was grayscale (single channel), remove the singleton dimension.

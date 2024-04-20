@@ -10,10 +10,10 @@ class TestImageProcessor(unittest.TestCase):
         # Get the directory of this file/script.
         base_dir = os.path.dirname(__file__)
         # Construct the image path relative to the script location.
-        self.image_path = os.path.join(base_dir, "../Inputs/image_to_filter.jpg")
+        self.image_path = os.path.join(base_dir, "../input/image_to_filter.jpg")
         self.image_path = os.path.normpath(self.image_path)
         # Ensure the output directory path is constructed similarly.
-        self.output_path = os.path.normpath(os.path.join(base_dir, "../output"))
+        self.output_path = os.path.normpath(os.path.join(base_dir, "output"))
         self.processor = ImageProcessor(self.image_path)
 
     def test_initialization_on_success(self):
@@ -88,9 +88,9 @@ class TestImageProcessor(unittest.TestCase):
     def test_brightness_adjustment(self):
         """Test the brightness adjustment"""
         try:
-            self.processor.adjust_image(enums.AdjustmentType.BRIGHTNESS.value, 1.5)
+            self.processor.adjust_image(enums.AdjustmentType.BRIGHTNESS.value, 50)
             self.processor.save_image(self.output_path + "/brightened_image_result.jpg")
-            self.processor.adjust_image(enums.AdjustmentType.BRIGHTNESS.value, 0.5)
+            self.processor.adjust_image(enums.AdjustmentType.BRIGHTNESS.value, -50)
             self.processor.save_image(self.output_path + "/darkened_image_result.jpg")
         except Exception as e:
             self.fail(f"Adjusting brightness raised an exception {e}")
@@ -110,8 +110,10 @@ class TestImageProcessor(unittest.TestCase):
         try:
             self.processor.adjust_image(enums.AdjustmentType.SATURATION.value, 1.5)
             self.processor.save_image(self.output_path + "/saturated_image_result.jpg")
+            self.processor.display_image()
             self.processor.adjust_image(enums.AdjustmentType.SATURATION.value, 0.5)
             self.processor.save_image(self.output_path + "/desaturated_image_result.jpg")
+            self.processor.display_image()
         except Exception as e:
             self.fail(f"Adjusting saturation raised an exception {e}")
 

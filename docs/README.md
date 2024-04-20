@@ -8,18 +8,41 @@ This CLI tool makes use of convolution operations to apply effects such as blurr
 
 ## Features
 
-- **Multiple Filters**: Apply different filters including:
+- **Multiple Filters**: Apply different filters to enhance your images:
   - **Box Blur**: Softens the image.
-    - ![Box Blur Example](../docs/Images/box_blur_result.jpeg "Box Blur Result")
-  - **Sobel Edge Detection**: Highlights edges, useful for object segmentation.
-    - <img src="../docs/Images/sobel_result.png" alt="Sobel Edge Detection Example" title="Sobel Edge Detection Result" width="300"/>
-  - **Sharpen**: Enhances image details to make them more defined.
-    - ![Sharpen Example](../docs/Images/sharpen_result.png "Sharpen Result")
+    <br>
+    <img src="../docs/Images/blurred_image_result.jpg" alt="Box Blur Example" title="Box Blur Result" width="200"/>
+  
+  - **Sobel Edge Detection**: Highlights significant edges in the image, useful for object segmentation.
+    <br>
+    <img src="../docs/Images/edge_detected_image_result.jpg" alt="Sobel Edge Detection Example" title="Sobel Edge Detection Result" width="200"/>
+
+  - **Sharpen**: Amplifies image details to make them more pronounced.
+    <br>
+    <img src="../docs/Images/sharpened_image_result.jpg" alt="Sharpen Example" title="Sharpen Result" width="200"/>
 
 
 - **Image Adjustments**: Adjust brightness, contrast, and saturation to fine-tune the visual aspects.
 - **Layering**: Apply multiple filters and adjustments in sequence.
 - **Output Options**: Directly display the edited image or save it to a designated path.
+
+- **Image Adjustments**: Adjust brightness, contrast, and saturation to fine-tune the visual aspects. Here are some results achieved with these adjustments:
+
+  - **Brightness Adjustment**:
+    <br>
+    <img src="../docs/Images/brightened_image_result.jpg" alt="Increased Brightness" title="Increased Brightness Result" width="200"/>
+    <img src="../docs/Images/darkened_image_result.jpg" alt="Decreased Brightness" title="Decreased Brightness Result" width="200"/>
+
+  - **Contrast Adjustment**:
+    <br>
+    <img src="../docs/Images/high_contrast_image_result.jpg" alt="Increased Contrast" title="Increased Contrast Result" width="200"/>
+    <img src="../docs/Images/low_contrast_image_result.jpg" alt="Decreased Contrast" title="Decreased Contrast Result" width="200"/>
+
+  - **Saturation Adjustment**:
+    <br>
+    <img src="../docs/Images/saturated_image_result.jpg" alt="Increased Saturation" title="Increased Saturation Result" width="200"/>
+    <img src="../docs/Images/desaturated_image_result.jpg" alt="Decreased Saturation" title="Decreased Saturation Result" width="200"/>
+
 
 ## Installation
 
@@ -39,11 +62,14 @@ To install the Advanced Image Editing CLI Tool, follow these steps:
    ```
 
 ## Usage
-
-To use the tool, run the following command from the command line:
+Before using the tool, ensure the PYTHONPATH environment variable is set to include the path to the source directory:
+```
+export PYTHONPATH=$(pwd)/source
+```
+Then, use the tool by running the following command from the command line:
 
 ```
-python edit_image --image <path-to-image> [--filter <filter-name> --strength <value>] [--adjust <adjustment-name> <value>]...
+python image_editor.py --image <path-to-image> [--filter <filter-name> --strength <value>] [--adjust <adjustment-name> <value>]...
 ```
 
 ### Examples
@@ -64,3 +90,9 @@ The tool supports the following commands:
 - **`--image <path>`**: Specifies the path to the image file.
 - **`--filter <filter-name> --strength <value>`**: Applies a specified filter with an optional strength value.
 - **`--adjust <adjustment-name> <value>`**: Performs color and image adjustments.
+- **`--output <path>`**: Specifies the path to save the edited image, or/and to display the edited image directly.
+
+adjust values:
+  - **`brightness <value>`**: Adjusts the brightness of the image. Positive values increase brightness, and negative values decrease brightness. If the value is out of the range [0, 255], it will be clipped to the nearest valid value.
+  - **`contrast <value>`**: Adjusts the contrast of the image. A value of 1.0 means no change, while greater than 1.0 increases contrast and less than 1.0 but greater than 0 decreases contrast.
+  - **`saturation <value>`**: Adjusts the saturation of the image. A value of 1.0 means no change, values greater than 1.0 enhance saturation, and values between 0 and 1.0 reduce saturation.
