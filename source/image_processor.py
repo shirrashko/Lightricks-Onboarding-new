@@ -1,8 +1,8 @@
+import colorsys
 from functools import partial
 import numpy as np
 from source.custom_image import CustomImage
 from filters import BlurFilter, EdgeDetectionFilter, SharpenFilter
-from PIL import ImageEnhance, ImageOps
 from source.enums import FilterName, AdjustmentType
 from PIL import Image
 
@@ -111,28 +111,59 @@ class ImageProcessor:
 
     def _adjust_contrast(self, contrast_factor: float) -> None:
         """
-        Adjusts the image contrast by blending the original image with an auto-contrasted version of the image.
+        Adjusts the image contrast. This is a basic implementation and does not use
+        advanced techniques such as histogram equalization or other contrast adjustment
+        algorithms that you might find in third-party libraries.
 
         Args:
-            contrast_factor (float): The factor by which to adjust the contrast. A value of 1.0
-                                     means no change, while greater than 1.0 increases contrast and less
-                                     than 1.0 but greater than 0 decreases contrast.
+            contrast_factor (float): Factor to adjust the contrast by. Greater than 1
+                                     increases contrast, less than 1 but greater than 0
+                                     decreases contrast.
         """
-        image = self.custom_image.convert_to_rgb().get_image()
-        enhanced_image = ImageOps.autocontrast(image, cutoff=0, ignore=None)
-        contrast_image = Image.blend(enhanced_image, image, contrast_factor)
-        self.custom_image.set_image(contrast_image)
+        image_array = np.asarray(self.custom_image.get_image(), dtype=np.float32)
+
+        # Normalize the image array to [0, 1]
+        image_array /= 255.0
+
+        # Apply contrast factor
+        mean = np.mean(image_array)
+        image_array = mean + (image_array - mean) * contrast_factor
+
+        # Clip values to [0, 1] and convert back to [0, 255]
+        image_array = np.clip(image_array, 0, 1) * 255
+
+        # Update image
+        self.custom_image.set_image(Image.fromarray(image_array.astype('uint8')))
 
     def _adjust_saturation(self, saturation_factor: float) -> None:
         """
-        Adjusts the image saturation.
+        Adjusts the image saturation using the colorsys library for conversion between RGB and HSV.
 
         Args:
-            saturation_factor (float): The factor by which to adjust the saturation. A value of 1.0
-                                       means no change, values greater than 1.0 enhance saturation, and
-                                       values between 0 and 1.0 reduce saturation.
+            saturation_factor (float): The factor by which to adjust the saturation.
         """
-        image = self.custom_image.convert_to_rgb().get_image()
-        converter = ImageEnhance.Color(image)
-        saturation_image = converter.enhance(saturation_factor)
-        self.custom_image.set_image(saturation_image)
+        # Convert image to numpy array
+        image_array = np.asarray(self.custom_image.get_image(), dtype=np.float32)
+
+        # Initialize an array for the adjusted image
+        adjusted_array = np.zeros_like(image_array)
+
+        # Loop over the image pixels
+        for i in range(image_array.shape[0]):
+            for j in range(image_array.shape[1]):
+                # Normalize RGB values to [0, 1]
+                r, g, b = image_array[i, j] / 255.0
+
+                # Convert to HSV, adjust saturation, convert back to RGB
+                h, s, v = colorsys.rgb_to_hsv(r, g, b)
+                s = max(min(s * saturation_factor, 1), 0)  # Saturate within bounds [0, 1]
+                r, g, b = colorsys.hsv_to_rgb(h, s, v)
+
+                # Put the pixel back in the adjusted array
+                adjusted_array[i, j] = np.array([r, g, b]) * 255.0
+
+        # Clip the values to be in the byte range and convert back to uint8
+        adjusted_array = np.clip(adjusted_array, 0, 255).astype('uint8')
+
+        # Update the image
+        self.custom_image.set_image(Image.fromarray(adjusted_array))

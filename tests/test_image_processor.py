@@ -110,10 +110,8 @@ class TestImageProcessor(unittest.TestCase):
         try:
             self.processor.adjust_image(enums.AdjustmentType.SATURATION.value, 1.5)
             self.processor.save_image(self.output_path + "/saturated_image_result.jpg")
-            self.processor.display_image()
             self.processor.adjust_image(enums.AdjustmentType.SATURATION.value, 0.5)
             self.processor.save_image(self.output_path + "/desaturated_image_result.jpg")
-            self.processor.display_image()
         except Exception as e:
             self.fail(f"Adjusting saturation raised an exception {e}")
 

@@ -74,11 +74,11 @@ python image_editor.py --image <path-to-image> [--filter <filter-name> --strengt
 
 - Apply a blur filter with strength 5:
   ```
-  python image_editor.py --image path/to/image.jpg --filter blur --strength 5
+  python image_editor.py --image input/image_to_filter.jpg --filter blur --strength 5
   ```
 - Adjust brightness by 20 units:
   ```
-  python image_editor.py --image path/to/image.jpg --adjust brightness 20
+  python image_editor.py --image input/image.jpg --adjust brightness 20
   ```
 
 ## API Reference
