@@ -26,16 +26,15 @@ class CommandLineInterface:
         args = self.parser.parse_args()
         try:
             processor = ImageProcessor(args.image)
-            CommandLineInterface._handle_filters(processor, args)
-            CommandLineInterface._handle_adjustments(processor, args)
-            CommandLineInterface._handle_output(processor, args)
+            self._handle_filters(processor, args)
+            self._handle_adjustments(processor, args)
+            self._handle_output(processor, args)
         except IOError as e:
             self._output_error_and_exit_program(e, "Error loading or processing image")
         except ValueError as e:
             self._output_error_and_exit_program(e, "Error in processing inputs")
-            sys.exit(1)
         except Exception as e:
-            self._output_error_and_exit_program(e, "Error in processing inputs")
+            self._output_error_and_exit_program(e, "Unexpected error occurred")
 
     @staticmethod
     def _setup_parser() -> argparse.ArgumentParser:

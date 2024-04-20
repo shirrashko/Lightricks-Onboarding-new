@@ -5,21 +5,24 @@ from custom_image import CustomImage
 
 class BaseFilter:
     """
-    Abstract base class for image filters.
+    Abstract base class for image filters. This class provides a framework for implementing various
+    image filtering techniques.
+
+    Subclasses should implement the `apply` method to define specific filter behavior.
     """
 
     def apply(self, image: CustomImage) -> None:
         """
-        Apply the filter to the given image.
+        Apply the filter to the given image. This method should be overridden in subclass.
 
         Args:
-            image (CustomImage): The PIL Image to be processed.
+            image (CustomImage): The image to be processed, wrapped in a CustomImage instance.
 
         Returns:
-            CustomImage: The processed image.
+            None
 
         Raises:
-            NotImplementedError: If the method is not overridden in the derived class.
+            NotImplementedError: If the method is not implemented in the subclass.
         """
         raise NotImplementedError("Each filter must implement the apply method.")
 
@@ -77,6 +80,15 @@ class BlurFilter(BaseFilter):
     """
 
     def apply(self, custom_image: CustomImage) -> None:
+        """
+        Applies a blur filter to the given CustomImage instance using a simple averaging kernel.
+
+        Args:
+            custom_image (CustomImage): The image to apply the blur filter to.
+
+        Returns:
+            None
+        """
         image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         kernel = np.ones((3, 3)) / 9  # Define a 3x3 averaging kernel
         blurred_array = self.convolve(image_array, kernel)
@@ -86,17 +98,28 @@ class BlurFilter(BaseFilter):
 
 class EdgeDetectionFilter(BaseFilter):
     """
-    Applies an edge detection filter using the Sobel operator to an image.
+    Applies an edge detection filter using the Sobel operator to an image. This filter highlights edges in the image.
     """
 
     def apply(self, custom_image: CustomImage) -> None:
+        """
+        Applies an edge detection filter to the given CustomImage instance using the Sobel operator.
+
+        Args:
+            custom_image (CustomImage): The image to apply the edge detection filter to.
+
+        Returns:
+            None
+        """
         image_array = np.array(custom_image.convert_to_grayscale().get_image(), dtype=np.float32)
         sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
         sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
         edges_x = self.convolve(image_array, sobel_x)
         edges_y = self.convolve(image_array, sobel_y)
         combined_edges = np.hypot(edges_x, edges_y)
-        edge_image = Image.fromarray(np.clip(combined_edges, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype('uint8'))
+        edge_image = Image.fromarray(np.clip(combined_edges,
+                                             CustomImage.MIN_INTENSITY,
+                                             CustomImage.MAX_INTENSITY).astype('uint8'))
         custom_image.set_image(edge_image)  # Update the CustomImage with the edge-detected image
 
 
@@ -106,8 +129,19 @@ class SharpenFilter(BaseFilter):
     """
 
     def apply(self, custom_image: CustomImage) -> None:
+        """
+        Applies a sharpening filter to the given CustomImage instance to enhance image clarity.
+
+        Args:
+            custom_image (CustomImage): The image to apply the sharpening filter to.
+
+        Returns:
+            None
+        """
         image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         sharpen_kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
         sharpened_array = self.convolve(image_array, sharpen_kernel)
-        sharpened_image = Image.fromarray(np.clip(sharpened_array, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype('uint8'))
+        sharpened_image = Image.fromarray(np.clip(sharpened_array,
+                                                  CustomImage.MIN_INTENSITY,
+                                                  CustomImage.MAX_INTENSITY).astype('uint8'))
         custom_image.set_image(sharpened_image)  # Update the CustomImage with the sharpened image
