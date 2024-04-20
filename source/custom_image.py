@@ -1,4 +1,3 @@
-import sys
 from PIL import Image
 
 
@@ -24,8 +23,7 @@ class CustomImage:
             self.image: Image.Image = Image.open(path)
             self.width, self.height = self.image.size
         except IOError as e:
-            print(f"Unable to open image: {e}")
-            sys.exit(1)
+            raise IOError(f"Unable to open image: {e}") from e
 
     def save(self, path: str) -> None:
         """
@@ -40,8 +38,7 @@ class CustomImage:
         try:
             self.image.save(path)
         except IOError as e:
-            print(f"Unable to save image: {e}")
-            sys.exit(1)
+            raise IOError(f"Unable to save image: {e}") from e
 
     def get_image(self) -> Image.Image:
         """
