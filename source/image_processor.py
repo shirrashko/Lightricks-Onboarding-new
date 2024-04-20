@@ -4,38 +4,77 @@ from PIL import ImageEnhance
 
 
 class ImageProcessor:
-    def __init__(self, image_path):
-        # Initialize with a single CustomImage instance that will be modified directly
-        self.custom_image = CustomImage(image_path)
+    """
+    Handles applying various filters and adjustments to an image.
 
-    def apply_filter(self, filter_name):
-        filters = {
+    Attributes:
+        custom_image (CustomImage): An instance of CustomImage containing the image to process.
+        filters (dict): A dictionary mapping filter names to their corresponding filter instances.
+    """
+
+    def __init__(self, image_path: str) -> None:
+        """
+        Initializes the ImageProcessor with an image and sets up available filters.
+
+        Args:
+            image_path (str): The path to the image to be processed.
+        """
+        self.custom_image = CustomImage(image_path)
+        self.filters = {
             "blur": BlurFilter(),
             "edge_detection": EdgeDetectionFilter(),
             "sharpen": SharpenFilter()
         }
-        if filter_name in filters:
-            filter_instance = filters[filter_name]
-            # Apply the filter directly to the CustomImage instance
-            self.custom_image.image = filter_instance.apply(self.custom_image)
+        self.adjustments = {
+            "brightness": ImageEnhance.Brightness,
+            "contrast": ImageEnhance.Contrast,
+            "saturation": ImageEnhance.Color
+        }
+
+    def apply_filter(self, filter_name: str, strength: int) -> None: # todo: add strength parameter logic
+        """
+        Applies a specified filter to the image.
+
+        Args:
+            filter_name (str): The name of the filter to apply.
+
+        Raises:
+            ValueError: If the filter name is not supported.
+        """
+        if filter_name in self.filters:
+            filter_instance = self.filters[filter_name]
+            self.custom_image.set_image(filter_instance.apply(self.custom_image))
         else:
             raise ValueError(f"Filter '{filter_name}' not supported.")
 
-    def adjust_image(self, adjustment, value):
-        if adjustment == "brightness":
-            enhancer = ImageEnhance.Brightness(self.custom_image.image)
-        elif adjustment == "contrast":
-            enhancer = ImageEnhance.Contrast(self.custom_image.image)
-        elif adjustment == "saturation":
-            enhancer = ImageEnhance.Color(self.custom_image.image)
+    def adjust_image(self, adjustment: str, value: float) -> None:
+        """
+        Adjusts an image property, such as brightness, contrast, or saturation.
+
+        Args:
+            adjustment (str): The type of adjustment to apply.
+            value (float): The degree to which the adjustment should be applied.
+
+        Raises:
+            ValueError: If the adjustment type is not supported.
+        """
+        if adjustment in self.adjustments:
+            enhancer = self.adjustments[adjustment](self.custom_image.get_image())
+            self.custom_image.image = enhancer.enhance(value)
         else:
             raise ValueError(f"Adjustment type '{adjustment}' not supported.")
 
-        # Update the image directly in the CustomImage instance
-        self.custom_image.image = enhancer.enhance(float(value))
+    def save_image(self, path: str) -> None:
+        """
+        Saves the processed image to the specified path.
 
-    def save_image(self, path):
-        self.custom_image.image.save(path)
+        Args:
+            path (str): The file path where the image will be saved.
+        """
+        self.custom_image.save(path)
 
-    def display_image(self):
-        self.custom_image.image.show()
+    def display_image(self) -> None:
+        """
+        Displays the processed image using the default image viewer.
+        """
+        self.custom_image.show()

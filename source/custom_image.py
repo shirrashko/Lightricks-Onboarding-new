@@ -1,14 +1,74 @@
-from PIL import Image
-
+import sys
+from PIL import Image, ImageOps
 
 class CustomImage:
-    def __init__(self, path):
-        self.image = Image.open(path)
+    """
+    CustomImage provides a wrapper around the PIL Image library, encapsulating common image
+    operations for ease of use in other parts of an application.
+    """
+
+    def __init__(self, path: str):
+        """
+        Initializes a new instance of CustomImage by loading an image from a specified file path.
+
+        Args:
+            path (str): The file path of the image to load.
+
+        Raises:
+            IOError: If the image cannot be opened, possibly due to a missing file or unsupported format.
+        """
+        try:
+            self.image: Image.Image = Image.open(path)
+            self.pixels = self.image.load()
+            self.width, self.height = self.image.size
+        except IOError as e:
+            print(f"Unable to open image: {e}")
+            sys.exit(1)
+
+    def save(self, path: str) -> None:
+        """
+        Saves the current image to a specified file path.
+
+        Args:
+            path (str): The file path where the image will be saved.
+
+        Raises:
+            IOError: If the image cannot be saved, possibly due to an unsupported format or permissions issue.
+        """
+        try:
+            self.image.save(path)
+        except IOError as e:
+            print(f"Unable to save image: {e}")
+            sys.exit(1)
+
+    def get_image(self) -> Image.Image:
+        """
+        Returns the current PIL Image object.
+
+        Returns:
+            Image.Image: The current PIL Image object.
+        """
+        return self.image
+
+    def set_image(self, image: Image.Image) -> None:
+        """
+        Sets the image of this CustomImage instance to a new PIL Image object and updates related properties.
+
+        Args:
+            image (Image.Image): A new PIL Image object to replace the current image.
+        """
+        self.image = image
+        self._update_image_attributes()
+
+    def show(self) -> None:
+        """
+        Displays the current image using the default image viewer.
+        """
+        self.image.show()
+
+    def _update_image_attributes(self) -> None:
+        """
+        Updates the image attributes such as pixels, width, and height after modifications to the image.
+        """
         self.pixels = self.image.load()
         self.width, self.height = self.image.size
-
-    def save(self, path):
-        self.image.save(path)
-
-    def show(self):
-        self.image.show()

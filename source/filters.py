@@ -9,7 +9,6 @@ class BaseFilter:
 
 class BlurFilter(BaseFilter):
     def apply(self, custom_image):
-        # Ensure the image is in an editable format
         image = custom_image.image.convert("RGB")
         # Get dimensions
         width, height = image.size
