@@ -61,7 +61,7 @@ class BlurFilter(BaseFilter):
     """
 
     def apply(self, custom_image: CustomImage) -> CustomImage:
-        image_array = np.array(custom_image.get_image().convert("RGB"), dtype=np.float32)
+        image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         kernel = np.ones((3, 3)) / 9  # Define a 3x3 averaging kernel
         blurred_array = self.convolve(image_array, kernel)
         blurred_image = Image.fromarray(blurred_array.astype('uint8'))
@@ -75,8 +75,7 @@ class EdgeDetectionFilter(BaseFilter):
     """
 
     def apply(self, custom_image: CustomImage) -> CustomImage:
-        custom_image.convert_to_grayscale()  # Convert image to grayscale for edge detection
-        image_array = np.array(custom_image.get_image(), dtype=np.float32)
+        image_array = np.array(custom_image.convert_to_grayscale().get_image(), dtype=np.float32)
         sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
         sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
         edges_x = self.convolve(image_array, sobel_x)
@@ -93,7 +92,7 @@ class SharpenFilter(BaseFilter):
     """
 
     def apply(self, custom_image: CustomImage) -> CustomImage:
-        image_array = np.array(custom_image.get_image().convert("RGB"), dtype=np.float32)
+        image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         sharpen_kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
         sharpened_array = self.convolve(image_array, sharpen_kernel)
         sharpened_image = Image.fromarray(np.clip(sharpened_array, 0, 255).astype('uint8'))

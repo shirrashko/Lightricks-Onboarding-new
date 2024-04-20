@@ -31,19 +31,21 @@ class ImageProcessor:
             "saturation": ImageEnhance.Color
         }
 
-    def apply_filter(self, filter_name: str, strength: float) -> None: # todo: add strength parameter logic
+    def apply_filter(self, filter_name: str, strength: float) -> None:
         """
         Applies a specified filter to the image.
 
         Args:
             filter_name (str): The name of the filter to apply.
+            strength (float): The strength of the filter to apply.
 
         Raises:
             ValueError: If the filter name is not supported.
         """
         if filter_name in self.filters:
             filter_instance = self.filters[filter_name]
-            self.custom_image.set_image(filter_instance.apply(self.custom_image))
+            for i in range(int(strength)):
+                self.custom_image.set_image(filter_instance.apply(self.custom_image))
         else:
             raise ValueError(f"Filter '{filter_name}' not supported.")
 
