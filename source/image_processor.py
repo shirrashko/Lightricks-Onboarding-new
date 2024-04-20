@@ -24,12 +24,12 @@ class ImageProcessor:
         self.filters = {
             FilterName.BLUR.value: BlurFilter(),
             FilterName.EDGE_DETECTION.value: EdgeDetectionFilter(),
-            FilterName.SHARPEN.value: SharpenFilter()
+            FilterName.SHARPEN.value: SharpenFilter(),
         }
         self.adjustments = {
             AdjustmentType.BRIGHTNESS.value: ImageEnhance.Brightness,
             AdjustmentType.CONTRAST.value: ImageEnhance.Contrast,
-            AdjustmentType.SATURATION.value: ImageEnhance.Color
+            AdjustmentType.SATURATION.value: ImageEnhance.Color,
         }
 
     def apply_filter(self, filter_name: str, strength: float) -> None:

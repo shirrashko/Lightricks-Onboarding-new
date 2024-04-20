@@ -1,17 +1,17 @@
 import argparse
 import sys
 from image_processor import ImageProcessor
-from source.enums import FilterName, AdjustmentType
+from source.enums import FilterName
 import logging
 
 # Configure logging at the top of your script
 logging.basicConfig(
     level=logging.INFO,  # Adjust the level as needed (DEBUG, ERROR, WARNING, etc.)
-    format='%(asctime)s - %(levelname)s - %(message)s',  # Example format
+    format="%(asctime)s - %(levelname)s - %(message)s",  # Example format
     handlers=[
-        logging.FileHandler('../image_processor.log'),  # Log messages are saved to this file
-        logging.StreamHandler(sys.stdout)  # Log messages are also printed to stdout
-    ]
+        logging.FileHandler("../image_processor.log"),  # Log messages are saved to this file
+        logging.StreamHandler(sys.stdout),  # Log messages are also printed to stdout
+    ],
 )
 
 
@@ -57,12 +57,21 @@ class CommandLineInterface:
         """
         parser = argparse.ArgumentParser(description="Advanced Image Editing CLI Tool")
         parser.add_argument("--image", required=True, help="Path to the image file")
-        parser.add_argument("--filter", action='append', choices=[f.value for f in FilterName],
-                            help="Apply a filter e.g., --filter blur")
-        parser.add_argument("--adjust", action='append', nargs=2, metavar=('ADJUSTMENT', 'VALUE'),
-                            help="Adjust image properties e.g., --adjust brightness 1.5")
+        parser.add_argument(
+            "--filter",
+            action="append",
+            choices=[f.value for f in FilterName],
+            help="Apply a filter e.g., --filter blur",
+        )
+        parser.add_argument(
+            "--adjust",
+            action="append",
+            nargs=2,
+            metavar=("ADJUSTMENT", "VALUE"),
+            help="Adjust image properties e.g., --adjust brightness 1.5",
+        )
         parser.add_argument("--save", help="Path to save the edited image")
-        parser.add_argument("--display", action='store_true', help="Display the edited image")
+        parser.add_argument("--display", action="store_true", help="Display the edited image")
         parser.add_argument("--strength", type=float, default=1.0, help="Strength of the filter")
         return parser
 

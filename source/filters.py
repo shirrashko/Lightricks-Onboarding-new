@@ -53,9 +53,9 @@ class BaseFilter:
 
         # Pads with the reflection of the vector mirrored on the first and last values of the vector along each axis.
         # For example, padding [1,2,3,4,5] with 2 elements on each side will result in [3,2,1,2,3,4,5,4,3].
-        padded_image = np.pad(image_array,
-                              ((pad_height, pad_height), (pad_width, pad_width), (0, 0)),
-                              mode='reflect')
+        padded_image = np.pad(
+            image_array, ((pad_height, pad_height), (pad_width, pad_width), (0, 0)), mode="reflect"
+        )
 
         # Prepare an output array of the same shape as the input.
         output_array = np.zeros_like(image_array)
@@ -64,7 +64,7 @@ class BaseFilter:
         for i in range(image_array.shape[0]):
             for j in range(image_array.shape[1]):
                 for k in range(image_array.shape[2]):  # Handle each channel independently.
-                    region = padded_image[i:i + kernel_height, j:j + kernel_width, k]
+                    region = padded_image[i : i + kernel_height, j : j + kernel_width, k]
                     output_array[i, j, k] = np.sum(region * kernel)
 
         # If the original image was grayscale (single channel), remove the singleton dimension.
@@ -92,7 +92,7 @@ class BlurFilter(BaseFilter):
         image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         kernel = np.ones((3, 3)) / 9  # Define a 3x3 averaging kernel
         blurred_array = self.convolve(image_array, kernel)
-        blurred_image = Image.fromarray(blurred_array.astype('uint8'))
+        blurred_image = Image.fromarray(blurred_array.astype("uint8"))
         custom_image.set_image(blurred_image)  # Update the CustomImage with the blurred image
 
 
@@ -117,9 +117,9 @@ class EdgeDetectionFilter(BaseFilter):
         edges_x = self.convolve(image_array, sobel_x)
         edges_y = self.convolve(image_array, sobel_y)
         combined_edges = np.hypot(edges_x, edges_y)
-        edge_image = Image.fromarray(np.clip(combined_edges,
-                                             CustomImage.MIN_INTENSITY,
-                                             CustomImage.MAX_INTENSITY).astype('uint8'))
+        edge_image = Image.fromarray(
+            np.clip(combined_edges, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype("uint8")
+        )
         custom_image.set_image(edge_image)  # Update the CustomImage with the edge-detected image
 
 
@@ -141,7 +141,7 @@ class SharpenFilter(BaseFilter):
         image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         sharpen_kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
         sharpened_array = self.convolve(image_array, sharpen_kernel)
-        sharpened_image = Image.fromarray(np.clip(sharpened_array,
-                                                  CustomImage.MIN_INTENSITY,
-                                                  CustomImage.MAX_INTENSITY).astype('uint8'))
+        sharpened_image = Image.fromarray(
+            np.clip(sharpened_array, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype("uint8")
+        )
         custom_image.set_image(sharpened_image)  # Update the CustomImage with the sharpened image
