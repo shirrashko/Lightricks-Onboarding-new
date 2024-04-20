@@ -2,6 +2,17 @@ import argparse
 import sys
 from image_processor import ImageProcessor
 from source.enums import FilterName, AdjustmentType
+import logging
+
+# Configure logging at the top of your script
+logging.basicConfig(
+    level=logging.INFO,  # Adjust the level as needed (DEBUG, ERROR, WARNING, etc.)
+    format='%(asctime)s - %(levelname)s - %(message)s',  # Example format
+    handlers=[
+        logging.FileHandler('image_processor.log'),  # Log messages are saved to this file
+        logging.StreamHandler(sys.stdout)  # Log messages are also printed to stdout
+    ]
+)
 
 
 class CommandLineInterface:
@@ -100,13 +111,13 @@ class CommandLineInterface:
         if args.save:
             try:
                 processor.save_image(args.save)
-                print(f"Image successfully saved to {args.save}")
+                logging.info(f"Image successfully saved to {args.save}")
             except IOError as e:
                 CommandLineInterface._output_error_and_exit_program(e, "Error saving image")
         if args.display:
             try:
                 processor.display_image()
-                print("Image displayed successfully.")
+                logging.info("Image displayed successfully.")
             except Exception as e:
                 CommandLineInterface._output_error_and_exit_program(e, "Error displaying image")
 
@@ -119,6 +130,5 @@ class CommandLineInterface:
             error (Exception): The exception object containing the error message.
             prefix_message (str): A prefix label for the error message to provide context.
         """
-        message = f"{prefix_message}: {str(error)}"
-        print(message)
+        logging.error(f"{prefix_message}: {error}")
         sys.exit(1)
