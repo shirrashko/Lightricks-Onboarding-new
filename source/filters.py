@@ -27,31 +27,24 @@ class BaseFilter:
     def convolve(image_array: np.ndarray, kernel: np.ndarray) -> np.ndarray:
         """
         Perform convolution on the given image array using the specified kernel.
-
-        Args:
-            image_array (np.ndarray): The input image as a numpy array.
-            kernel (np.ndarray): The convolution kernel as a numpy array.
-
-        Returns:
-            np.ndarray: The convolved image as a numpy array.
         """
+        if image_array.ndim == 2:  # If grayscale, add a third dimension
+            image_array = image_array[:, :, np.newaxis]
+
         kernel_height, kernel_width = kernel.shape
         pad_height, pad_width = kernel_height // 2, kernel_width // 2
+        padded_image = np.pad(image_array, [(pad_height, pad_height), (pad_width, pad_width), (0, 0)],
+                              mode='constant', constant_values=0)
 
-        # Pad the image to handle borders
-        padded_image = np.pad(image_array, ((pad_height, pad_height), (pad_width, pad_width), (0, 0)), mode='constant',
-                              constant_values=0)
-
-        # Prepare an output array
         output_array = np.zeros_like(image_array)
-
-        # Perform convolution
         for i in range(image_array.shape[0]):
             for j in range(image_array.shape[1]):
-                for k in range(image_array.shape[2]):  # Assuming RGB channels
+                for k in range(image_array.shape[2]):
                     region = padded_image[i:i + kernel_height, j:j + kernel_width, k]
                     output_array[i, j, k] = np.sum(region * kernel)
 
+        if output_array.shape[2] == 1:  # If originally grayscale, remove the third dimension
+            output_array = output_array[:, :, 0]
         return output_array
 
 

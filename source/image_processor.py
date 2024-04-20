@@ -1,6 +1,7 @@
 from source.custom_image import CustomImage
 from filters import BlurFilter, EdgeDetectionFilter, SharpenFilter
 from PIL import ImageEnhance
+from source.enums import FilterName, AdjustmentType
 
 
 class ImageProcessor:
@@ -21,14 +22,14 @@ class ImageProcessor:
         """
         self.custom_image = CustomImage(image_path)
         self.filters = {
-            "blur": BlurFilter(),
-            "edge_detection": EdgeDetectionFilter(),
-            "sharpen": SharpenFilter()
+            FilterName.BLUR.value: BlurFilter(),
+            FilterName.EDGE_DETECTION.value: EdgeDetectionFilter(),
+            FilterName.SHARPEN.value: SharpenFilter()
         }
         self.adjustments = {
-            "brightness": ImageEnhance.Brightness,
-            "contrast": ImageEnhance.Contrast,
-            "saturation": ImageEnhance.Color
+            AdjustmentType.BRIGHTNESS.value: ImageEnhance.Brightness,
+            AdjustmentType.CONTRAST.value: ImageEnhance.Contrast,
+            AdjustmentType.SATURATION.value: ImageEnhance.Color
         }
 
     def apply_filter(self, filter_name: str, strength: float) -> None:
