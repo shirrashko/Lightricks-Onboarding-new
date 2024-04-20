@@ -13,16 +13,10 @@ class CustomImage:
     def __init__(self, path: str):
         """
         Initializes a new instance of CustomImage by loading an image from a specified file path.
-
-        Args:
-            path (str): The file path of the image to load.
-
-        Raises:
-            IOError: If the image cannot be opened, possibly due to a missing file or unsupported format.
         """
         try:
-            self.image: Image.Image = Image.open(path)
-            self.width, self.height = self.image.size
+            with Image.open(path) as img:
+                self.image = img.copy()  # Make a copy of the image to work with
         except IOError as e:
             raise IOError(f"Unable to open image: {e}") from e
 
