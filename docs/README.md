@@ -21,11 +21,7 @@ This CLI tool makes use of convolution operations to apply effects such as blurr
     <br>
     <img src="../docs/Images/sharpened_image_result.jpg" alt="Sharpen Example" title="Sharpen Result" width="200"/>
 
-
-- **Image Adjustments**: Adjust brightness, contrast, and saturation to fine-tune the visual aspects.
-- **Layering**: Apply multiple filters and adjustments in sequence.
-- **Output Options**: Directly display the edited image or save it to a designated path.
-
+    
 - **Image Adjustments**: Adjust brightness, contrast, and saturation to fine-tune the visual aspects. Here are some results achieved with these adjustments:
 
   - **Brightness Adjustment**:
@@ -43,6 +39,8 @@ This CLI tool makes use of convolution operations to apply effects such as blurr
     <img src="../docs/Images/saturated_image_result.jpg" alt="Increased Saturation" title="Increased Saturation Result" width="200"/>
     <img src="../docs/Images/desaturated_image_result.jpg" alt="Decreased Saturation" title="Decreased Saturation Result" width="200"/>
 
+- **Layering**: Apply multiple filters and adjustments in sequence.
+- **Output Options**: Directly display the edited image or save it to a designated path.
 
 ## Installation
 
@@ -76,11 +74,11 @@ python image_editor.py --image <path-to-image> [--filter <filter-name> --strengt
 
 - Apply a blur filter with strength 5:
   ```
-  python edit_image --image path/to/image.jpg --filter blur --strength 5
+  python image_editor.py --image path/to/image.jpg --filter blur --strength 5
   ```
 - Adjust brightness by 20 units:
   ```
-  python edit_image --image path/to/image.jpg --adjust brightness 20
+  python image_editor.py --image path/to/image.jpg --adjust brightness 20
   ```
 
 ## API Reference
