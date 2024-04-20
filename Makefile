@@ -1,4 +1,4 @@
-.PHONY: lint format
+.PHONY: lint format requirements
 
 # Linting the code
 lint:
@@ -8,3 +8,6 @@ lint:
 format:
 	black --line-length 110 ./source
 
+# Generate requirements.txt
+requirements:
+	pip freeze > requirements.txt
