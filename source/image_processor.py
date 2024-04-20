@@ -31,7 +31,7 @@ class ImageProcessor:
             "saturation": ImageEnhance.Color
         }
 
-    def apply_filter(self, filter_name: str, strength: int) -> None: # todo: add strength parameter logic
+    def apply_filter(self, filter_name: str, strength: float) -> None: # todo: add strength parameter logic
         """
         Applies a specified filter to the image.
 

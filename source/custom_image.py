@@ -1,5 +1,6 @@
 import sys
-from PIL import Image, ImageOps
+from PIL import Image
+
 
 class CustomImage:
     """
@@ -19,7 +20,6 @@ class CustomImage:
         """
         try:
             self.image: Image.Image = Image.open(path)
-            self.pixels = self.image.load()
             self.width, self.height = self.image.size
         except IOError as e:
             print(f"Unable to open image: {e}")
@@ -58,7 +58,6 @@ class CustomImage:
             image (Image.Image): A new PIL Image object to replace the current image.
         """
         self.image = image
-        self._update_image_attributes()
 
     def show(self) -> None:
         """
@@ -66,9 +65,22 @@ class CustomImage:
         """
         self.image.show()
 
-    def _update_image_attributes(self) -> None:
+    def convert_to_grayscale(self) -> 'CustomImage':
         """
-        Updates the image attributes such as pixels, width, and height after modifications to the image.
+        Converts the image to grayscale.
+
+        Returns:
+            CustomImage: The current instance with the updated image.
         """
-        self.pixels = self.image.load()
-        self.width, self.height = self.image.size
+        self.image = self.image.convert("L")
+        return self
+
+    def convert_to_rgb(self) -> 'CustomImage':
+        """
+        Converts the image to RGB mode.
+
+        Returns:
+            CustomImage: The current instance with the updated image.
+        """
+        self.image = self.image.convert("RGB")
+        return self

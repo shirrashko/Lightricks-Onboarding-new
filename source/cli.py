@@ -13,7 +13,7 @@ class CommandLineInterface:
         """
         Initializes the command-line parser with all the expected options and their configurations.
         """
-        self.parser = self._setup_parser()
+        self.parser = CommandLineInterface._setup_parser()
 
     def run(self):
         """
@@ -25,9 +25,9 @@ class CommandLineInterface:
         args = self.parser.parse_args()
         try:
             processor = ImageProcessor(args.image)
-            self._handle_filters(processor, args)
-            self._handle_adjustments(processor, args)
-            self._handle_output(processor, args)
+            CommandLineInterface._handle_filters(processor, args)
+            CommandLineInterface._handle_adjustments(processor, args)
+            CommandLineInterface._handle_output(processor, args)
         except IOError as e:
             print(f"Error loading or processing image: {e}")
             sys.exit(1)

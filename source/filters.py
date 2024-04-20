@@ -1,113 +1,102 @@
-from PIL import Image
 import numpy as np
+from PIL import Image
+from custom_image import CustomImage
 
 
 class BaseFilter:
-    def apply(self, image):
+    """
+    Abstract base class for image filters.
+    """
+
+    def apply(self, image: CustomImage) -> CustomImage:
+        """
+        Apply the filter to the given image.
+
+        Args:
+            image (CustomImage): The PIL Image to be processed.
+
+        Returns:
+            CustomImage: The processed image.
+
+        Raises:
+            NotImplementedError: If the method is not overridden in the derived class.
+        """
         raise NotImplementedError("Each filter must implement the apply method.")
+
+    @staticmethod
+    def convolve(image_array: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+        """
+        Perform convolution on the given image array using the specified kernel.
+
+        Args:
+            image_array (np.ndarray): The input image as a numpy array.
+            kernel (np.ndarray): The convolution kernel as a numpy array.
+
+        Returns:
+            np.ndarray: The convolved image as a numpy array.
+        """
+        kernel_height, kernel_width = kernel.shape
+        pad_height, pad_width = kernel_height // 2, kernel_width // 2
+
+        # Pad the image to handle borders
+        padded_image = np.pad(image_array, ((pad_height, pad_height), (pad_width, pad_width), (0, 0)), mode='constant',
+                              constant_values=0)
+
+        # Prepare an output array
+        output_array = np.zeros_like(image_array)
+
+        # Perform convolution
+        for i in range(image_array.shape[0]):
+            for j in range(image_array.shape[1]):
+                for k in range(image_array.shape[2]):  # Assuming RGB channels
+                    region = padded_image[i:i + kernel_height, j:j + kernel_width, k]
+                    output_array[i, j, k] = np.sum(region * kernel)
+
+        return output_array
 
 
 class BlurFilter(BaseFilter):
-    def apply(self, custom_image):
-        image = custom_image.image.convert("RGB")
-        # Get dimensions
-        width, height = image.size
+    """
+    Applies a simple averaging blur filter to an image.
+    """
 
-        # Prepare a new image for output
-        blurred_image = Image.new("RGB", (width, height))
-        pixels = image.load()
-        output_pixels = blurred_image.load()
-
-        # Iterate over every pixel except the border
-        for i in range(1, width - 1):
-            for j in range(1, height - 1):
-                # Initialize the sum for each color channel
-                total_red, total_green, total_blue = 0, 0, 0
-
-                # Sum up all the pixel values in the 3x3 neighborhood
-                for dx in range(-1, 2):
-                    for dy in range(-1, 2):
-                        r, g, b = pixels[i + dx, j + dy]
-                        total_red += r
-                        total_green += g
-                        total_blue += b
-
-                # Calculate the average for each color channel
-                avg_red = total_red // 9
-                avg_green = total_green // 9
-                avg_blue = total_blue // 9
-
-                # Set the pixel to the average value
-                output_pixels[i, j] = (avg_red, avg_green, avg_blue)
-
-        return blurred_image
+    def apply(self, custom_image: CustomImage) -> CustomImage:
+        image_array = np.array(custom_image.get_image().convert("RGB"), dtype=np.float32)
+        kernel = np.ones((3, 3)) / 9  # Define a 3x3 averaging kernel
+        blurred_array = self.convolve(image_array, kernel)
+        blurred_image = Image.fromarray(blurred_array.astype('uint8'))
+        custom_image.set_image(blurred_image)  # Update the CustomImage with the blurred image
+        return custom_image
 
 
 class EdgeDetectionFilter(BaseFilter):
-    def apply(self, custom_image):
-        # Convert to grayscale
-        image_array = np.array(custom_image.image.convert("L"))
+    """
+    Applies an edge detection filter using the Sobel operator to an image.
+    """
 
-        sobel_x_kernel = np.array([[-1, 0, 1],
-                                   [-2, 0, 2],
-                                   [-1, 0, 1]])
-
-        sobel_y_kernel = np.array([[-1, -2, -1],
-                                   [0, 0, 0],
-                                   [1, 2, 1]])
-
-        # Apply the Sobel filter
-        edges_x = self.convolve(image_array, sobel_x_kernel)
-        edges_y = self.convolve(image_array, sobel_y_kernel)
-
-        # Combine the horizontal and vertical edges
+    def apply(self, custom_image: CustomImage) -> CustomImage:
+        custom_image.convert_to_grayscale()  # Convert image to grayscale for edge detection
+        image_array = np.array(custom_image.get_image(), dtype=np.float32)
+        sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+        sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
+        edges_x = self.convolve(image_array, sobel_x)
+        edges_y = self.convolve(image_array, sobel_y)
         combined_edges = np.hypot(edges_x, edges_y)
-        combined_edges = (combined_edges / combined_edges.max() * 255).astype(np.uint8)
-
-        # Convert back to PIL Image and return
-        return Image.fromarray(combined_edges)
-
-    def convolve(self, image_array, kernel):
-        # This function will perform the convolution operation (without padding)
-        kernel_size = kernel.shape[0]
-        kernel_radius = kernel_size // 2
-        image_height, image_width = image_array.shape
-        result = np.zeros((image_height - kernel_size + 1, image_width - kernel_size + 1))
-
-        for i in range(kernel_radius, image_height - kernel_radius):
-            for j in range(kernel_radius, image_width - kernel_radius):
-                region = image_array[i - kernel_radius:i + kernel_radius + 1, j - kernel_radius:j + kernel_radius + 1]
-                result[i - kernel_radius, j - kernel_radius] = np.sum(region * kernel)
-
-        return result
+        edge_image = Image.fromarray(np.clip(combined_edges, 0, 255).astype('uint8'))
+        custom_image.set_image(edge_image)  # Update the CustomImage with the edge-detected image
+        return custom_image
 
 
 class SharpenFilter(BaseFilter):
-    def apply(self, custom_image):
-        # Convert the image to a numpy array for manipulation
-        image_array = np.array(custom_image.image.convert("RGB"))
-        original_array = image_array.copy()
+    """
+    Applies a sharpening filter to enhance the edges in an image.
+    """
 
-        # Define the sharpening kernel, it accentuates the current pixel and subtracts some of the surrounding pixel
-        # values
-        sharpen_kernel = np.array([
-            [-1, -1, -1],
-            [-1,  9, -1],
-            [-1, -1, -1]
-        ])
+    def apply(self, custom_image: CustomImage) -> CustomImage:
+        image_array = np.array(custom_image.get_image().convert("RGB"), dtype=np.float32)
+        sharpen_kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+        sharpened_array = self.convolve(image_array, sharpen_kernel)
+        sharpened_image = Image.fromarray(np.clip(sharpened_array, 0, 255).astype('uint8'))
+        custom_image.set_image(sharpened_image)  # Update the CustomImage with the sharpened image
+        return custom_image
 
-        # Apply the convolution operation (this is a simplistic and not optimized way to apply a kernel to an image)
-        padded_image = np.pad(image_array, [(1, 1), (1, 1), (0, 0)], mode='constant', constant_values=0)
-        for i in range(image_array.shape[0]):
-            for j in range(image_array.shape[1]):
-                # Extract the region of interest
-                region = padded_image[i:i+3, j:j+3]
-                # Apply the kernel to each channel
-                for k in range(3):  # Assuming RGB
-                    image_array[i, j, k] = np.clip(np.sum(region[:, :, k] * sharpen_kernel), 0, 255)
-
-        # The sharpened image is now a combination of the original and the high-pass filter result
-        sharpened_array = np.clip(original_array + (image_array - original_array), 0, 255).astype(np.uint8)
-
-        # Convert the result back to an image
-        return Image.fromarray(sharpened_array)
