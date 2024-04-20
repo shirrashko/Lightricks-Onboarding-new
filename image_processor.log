@@ -10,3 +10,13 @@
 2024-04-20 22:28:49,531 - ERROR - Unexpected error occurred: 'NoneType' object is not iterable
 2024-04-20 22:29:03,713 - ERROR - Unexpected error occurred: 'NoneType' object is not iterable
 2024-04-20 22:30:06,355 - INFO - Image displayed successfully.
+2024-04-20 23:51:13,980 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:51:48,717 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:52:03,256 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:52:27,989 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:52:30,952 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:52:44,071 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:52:54,168 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:53:22,622 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 23:56:08,277 - INFO - Image successfully saved to path/to/save/image.jpg
+2024-04-20 23:57:27,740 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg

@@ -10,7 +10,7 @@ class TestImageProcessor(unittest.TestCase):
         # Get the directory of this file/script.
         base_dir = os.path.dirname(__file__)
         # Construct the image path relative to the script location.
-        self.image_path = os.path.join(base_dir, "../Images/image_to_filter.jpg")
+        self.image_path = os.path.join(base_dir, "../Inputs/image_to_filter.jpg")
         self.image_path = os.path.normpath(self.image_path)
         # Ensure the output directory path is constructed similarly.
         self.output_path = os.path.normpath(os.path.join(base_dir, "../output"))

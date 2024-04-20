@@ -10,11 +10,11 @@ This CLI tool makes use of convolution operations to apply effects such as blurr
 
 - **Multiple Filters**: Apply different filters including:
   - **Box Blur**: Softens the image.
-    - ![Box Blur Example](../Images/box_blur_result.jpeg "Box Blur Result")
+    - ![Box Blur Example](../docs/Images/box_blur_result.jpeg "Box Blur Result")
   - **Sobel Edge Detection**: Highlights edges, useful for object segmentation.
-    - <img src="../Images/sobel_result.png" alt="Sobel Edge Detection Example" title="Sobel Edge Detection Result" width="300"/>
+    - <img src="../docs/Images/sobel_result.png" alt="Sobel Edge Detection Example" title="Sobel Edge Detection Result" width="300"/>
   - **Sharpen**: Enhances image details to make them more defined.
-    - ![Sharpen Example](../Images/sharpen_result.png "Sharpen Result")
+    - ![Sharpen Example](../docs/Images/sharpen_result.png "Sharpen Result")
 
 
 - **Image Adjustments**: Adjust brightness, contrast, and saturation to fine-tune the visual aspects.
