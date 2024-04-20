@@ -1,0 +1,12 @@
+2024-04-20 19:54:19,908 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 19:54:20,065 - INFO - Image displayed successfully.
+2024-04-20 20:07:01,692 - ERROR - Error loading or processing image: Unable to open image: [Errno 2] No such file or directory: '/Users/srashkovits/PycharmProjects/onboarding-to-lightricks/Images/image.jpg'
+2024-04-20 20:07:28,616 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 20:07:28,854 - INFO - Image displayed successfully.
+2024-04-20 20:08:16,943 - INFO - Image successfully saved to /Users/srashkovits/PycharmProjects/onboarding-to-lightricks/output/filtered_image_result.jpg
+2024-04-20 20:08:17,111 - INFO - Image displayed successfully.
+2024-04-20 22:27:49,552 - ERROR - Error loading or processing image: Unable to open image: [Errno 2] No such file or directory: '/Users/srashkovits/PycharmProjects/onboarding-to-lightricks/Images/image.jpg'
+2024-04-20 22:28:33,126 - ERROR - Error loading or processing image: Unable to open image: [Errno 2] No such file or directory: '/Users/srashkovits/PycharmProjects/onboarding-to-lightricks/Images/image-to-filter.jpg'
+2024-04-20 22:28:49,531 - ERROR - Unexpected error occurred: 'NoneType' object is not iterable
+2024-04-20 22:29:03,713 - ERROR - Unexpected error occurred: 'NoneType' object is not iterable
+2024-04-20 22:30:06,355 - INFO - Image displayed successfully.
