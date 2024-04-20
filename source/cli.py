@@ -9,7 +9,7 @@ logging.basicConfig(
     level=logging.INFO,  # Adjust the level as needed (DEBUG, ERROR, WARNING, etc.)
     format='%(asctime)s - %(levelname)s - %(message)s',  # Example format
     handlers=[
-        logging.FileHandler('image_processor.log'),  # Log messages are saved to this file
+        logging.FileHandler('../image_processor.log'),  # Log messages are saved to this file
         logging.StreamHandler(sys.stdout)  # Log messages are also printed to stdout
     ]
 )
@@ -78,11 +78,11 @@ class CommandLineInterface:
         Raises:
             SystemExit: Exits the program if an invalid filter name is provided.
         """
-        for filter_name in args.filter:
-            try:
+        try:
+            for filter_name in args.filter:
                 processor.apply_filter(filter_name, args.strength)
-            except ValueError as e:
-                CommandLineInterface._output_error_and_exit_program(e, "Error applying filter")
+        except ValueError as e:
+            CommandLineInterface._output_error_and_exit_program(e, "Error applying filter")
 
     @staticmethod
     def _handle_adjustments(processor, args):
@@ -96,12 +96,12 @@ class CommandLineInterface:
         Raises:
             SystemExit: Exits the program if an invalid adjustment is provided.
         """
-        for adjustment_pair in args.adjust:
-            adjustment, value = adjustment_pair
-            try:
+        try:
+            for adjustment_pair in args.adjust:
+                adjustment, value = adjustment_pair
                 processor.adjust_image(adjustment, float(value))
-            except ValueError as e:
-                CommandLineInterface._output_error_and_exit_program(e, "Error adjusting image")
+        except ValueError as e:
+            CommandLineInterface._output_error_and_exit_program(e, "Error adjusting image")
 
     @staticmethod
     def _handle_output(processor, args):
