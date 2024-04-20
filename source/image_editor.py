@@ -1,5 +1,3 @@
-# main.py
-
 from cli import CommandLineInterface
 
 if __name__ == "__main__":

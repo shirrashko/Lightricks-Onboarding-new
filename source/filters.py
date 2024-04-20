@@ -60,13 +60,12 @@ class BlurFilter(BaseFilter):
     Applies a simple averaging blur filter to an image.
     """
 
-    def apply(self, custom_image: CustomImage) -> CustomImage:
+    def apply(self, custom_image: CustomImage) -> None:
         image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         kernel = np.ones((3, 3)) / 9  # Define a 3x3 averaging kernel
         blurred_array = self.convolve(image_array, kernel)
         blurred_image = Image.fromarray(blurred_array.astype('uint8'))
         custom_image.set_image(blurred_image)  # Update the CustomImage with the blurred image
-        return custom_image
 
 
 class EdgeDetectionFilter(BaseFilter):
@@ -74,7 +73,7 @@ class EdgeDetectionFilter(BaseFilter):
     Applies an edge detection filter using the Sobel operator to an image.
     """
 
-    def apply(self, custom_image: CustomImage) -> CustomImage:
+    def apply(self, custom_image: CustomImage) -> None:
         image_array = np.array(custom_image.convert_to_grayscale().get_image(), dtype=np.float32)
         sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
         sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
@@ -83,7 +82,6 @@ class EdgeDetectionFilter(BaseFilter):
         combined_edges = np.hypot(edges_x, edges_y)
         edge_image = Image.fromarray(np.clip(combined_edges, 0, 255).astype('uint8'))
         custom_image.set_image(edge_image)  # Update the CustomImage with the edge-detected image
-        return custom_image
 
 
 class SharpenFilter(BaseFilter):
@@ -91,11 +89,10 @@ class SharpenFilter(BaseFilter):
     Applies a sharpening filter to enhance the edges in an image.
     """
 
-    def apply(self, custom_image: CustomImage) -> CustomImage:
+    def apply(self, custom_image: CustomImage) -> None:
         image_array = np.array(custom_image.convert_to_rgb().get_image(), dtype=np.float32)
         sharpen_kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
         sharpened_array = self.convolve(image_array, sharpen_kernel)
         sharpened_image = Image.fromarray(np.clip(sharpened_array, 0, 255).astype('uint8'))
         custom_image.set_image(sharpened_image)  # Update the CustomImage with the sharpened image
-        return custom_image
 

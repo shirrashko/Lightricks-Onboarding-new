@@ -45,7 +45,8 @@ class ImageProcessor:
         if filter_name in self.filters:
             filter_instance = self.filters[filter_name]
             for i in range(int(strength)):
-                self.custom_image.set_image(filter_instance.apply(self.custom_image))
+                filter_instance.apply(self.custom_image)
+
         else:
             raise ValueError(f"Filter '{filter_name}' not supported.")
 
