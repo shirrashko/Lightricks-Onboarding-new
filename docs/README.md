@@ -11,33 +11,33 @@ This CLI tool makes use of convolution operations to apply effects such as blurr
 - **Multiple Filters**: Apply different filters to enhance your images:
   - **Box Blur**: Softens the image.
     <br>
-    <img src="../docs/Images/blurred_image_result.jpg" alt="Box Blur Example" title="Box Blur Result" width="200"/>
+    <img src="../docs/images/blurred_image_result.jpg" alt="Box Blur Example" title="Box Blur Result" width="200"/>
   
   - **Sobel Edge Detection**: Highlights significant edges in the image, useful for object segmentation.
     <br>
-    <img src="../docs/Images/edge_detected_image_result.jpg" alt="Sobel Edge Detection Example" title="Sobel Edge Detection Result" width="200"/>
+    <img src="../docs/images/edge_detected_image_result.jpg" alt="Sobel Edge Detection Example" title="Sobel Edge Detection Result" width="200"/>
 
   - **Sharpen**: Amplifies image details to make them more pronounced.
     <br>
-    <img src="../docs/Images/sharpened_image_result.jpg" alt="Sharpen Example" title="Sharpen Result" width="200"/>
+    <img src="../docs/images/sharpened_image_result.jpg" alt="Sharpen Example" title="Sharpen Result" width="200"/>
 
     
 - **Image Adjustments**: Adjust brightness, contrast, and saturation to fine-tune the visual aspects. Here are some results achieved with these adjustments:
 
   - **Brightness Adjustment**:
     <br>
-    <img src="../docs/Images/brightened_image_result.jpg" alt="Increased Brightness" title="Increased Brightness Result" width="200"/>
-    <img src="../docs/Images/darkened_image_result.jpg" alt="Decreased Brightness" title="Decreased Brightness Result" width="200"/>
+    <img src="../docs/images/brightened_image_result.jpg" alt="Increased Brightness" title="Increased Brightness Result" width="200"/>
+    <img src="../docs/images/darkened_image_result.jpg" alt="Decreased Brightness" title="Decreased Brightness Result" width="200"/>
 
   - **Contrast Adjustment**:
     <br>
-    <img src="../docs/Images/high_contrast_image_result.jpg" alt="Increased Contrast" title="Increased Contrast Result" width="200"/>
-    <img src="../docs/Images/low_contrast_image_result.jpg" alt="Decreased Contrast" title="Decreased Contrast Result" width="200"/>
+    <img src="../docs/images/high_contrast_image_result.jpg" alt="Increased Contrast" title="Increased Contrast Result" width="200"/>
+    <img src="../docs/images/low_contrast_image_result.jpg" alt="Decreased Contrast" title="Decreased Contrast Result" width="200"/>
 
   - **Saturation Adjustment**:
     <br>
-    <img src="../docs/Images/saturated_image_result.jpg" alt="Increased Saturation" title="Increased Saturation Result" width="200"/>
-    <img src="../docs/Images/desaturated_image_result.jpg" alt="Decreased Saturation" title="Decreased Saturation Result" width="200"/>
+    <img src="../docs/images/saturated_image_result.jpg" alt="Increased Saturation" title="Increased Saturation Result" width="200"/>
+    <img src="../docs/images/desaturated_image_result.jpg" alt="Decreased Saturation" title="Decreased Saturation Result" width="200"/>
 
 - **Layering**: Apply multiple filters and adjustments in sequence.
 - **Output Options**: Directly display the edited image or save it to a designated path.
