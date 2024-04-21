@@ -104,7 +104,9 @@ class ImageProcessor:
         image_array = np.asarray(self.custom_image.convert_to_rgb().get_image(), dtype=np.float32)
 
         # Apply brightness adjustment by adding the value
-        image_array = np.clip(image_array + brightness_value, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY)
+        image_array = np.clip(
+            image_array + brightness_value, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY
+        )
 
         # Convert back to Image and save to custom_image
         self.custom_image.set_image(Image.fromarray(image_array.astype("uint8")))
@@ -133,7 +135,7 @@ class ImageProcessor:
         image_array = np.clip(image_array, 0, 1) * CustomImage.MAX_INTENSITY
 
         # Update image
-        self.custom_image.set_image(Image.fromarray(image_array.astype('uint8')))
+        self.custom_image.set_image(Image.fromarray(image_array.astype("uint8")))
 
     def _adjust_saturation(self, saturation_factor: float) -> None:
         """
@@ -163,7 +165,9 @@ class ImageProcessor:
                 adjusted_array[i, j] = np.array([r, g, b]) * float(CustomImage.MAX_INTENSITY)
 
         # Clip the values to be in the byte range and convert back to uint8
-        adjusted_array = np.clip(adjusted_array, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype('uint8')
+        adjusted_array = np.clip(adjusted_array, CustomImage.MIN_INTENSITY, CustomImage.MAX_INTENSITY).astype(
+            "uint8"
+        )
 
         # Update the image
         self.custom_image.set_image(Image.fromarray(adjusted_array))
