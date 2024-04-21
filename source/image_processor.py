@@ -123,9 +123,8 @@ class ImageProcessor:
                                      decreases contrast.
         """
         image_array = np.asarray(self.custom_image.get_image(), dtype=np.float32)
-
-        # Normalize the image array to [0, 1]
-        image_array /= float(CustomImage.MIN_INTENSITY)
+        # Normalize the image array to [0, 1] by dividing by the maximum intensity value
+        image_array /= CustomImage.MAX_INTENSITY
 
         # Apply contrast factor
         mean = np.mean(image_array)
@@ -135,7 +134,7 @@ class ImageProcessor:
         image_array = np.clip(image_array, 0, 1) * CustomImage.MAX_INTENSITY
 
         # Update image
-        self.custom_image.set_image(Image.fromarray(image_array.astype("uint8")))
+        self.custom_image.set_image(Image.fromarray(image_array.astype('uint8')))
 
     def _adjust_saturation(self, saturation_factor: float) -> None:
         """
